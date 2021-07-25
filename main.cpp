@@ -88,15 +88,16 @@ public:
         return result->getCash();
     }
 
-    auto findAccount(const std::string& accountID)
+    Account* findAccount(const std::string& accountID)
     {
         auto findAcc = std::find_if(begin(the_bank), end(the_bank),
                                   [&accountID](auto& acc) { return acc.getID() == accountID;});
         if (findAcc != end(the_bank))
-            return findAcc;
+            return &*findAcc;
         else
         {
             std::cout << "There is no such account in our base." << std::endl;
+            return nullptr;
         }
     }
     void transferCash(const std::string& accountID1, const std::string& accountID2, int amount)
@@ -105,7 +106,7 @@ public:
 
         auto recipient = findAccount(accountID2);
 
-        if (sender != end(the_bank) && recipient != end(the_bank))
+        if (sender != nullptr && recipient != nullptr)
         {
             if (sender->subtractCash(amount))
             {
@@ -117,10 +118,6 @@ public:
             {
                 std::cout << "This account: " << sender->getID() << " doesn't have enough funds." << std::endl;
             }
-        }
-        else
-        {
-            std::cout << "Sorry, either sender or recipient is not in our base." << std::endl;
         }
     }
 
@@ -168,7 +165,7 @@ int main() {
 
     bnk.bankReserve();
 
-    bnk.transferCash("Ojciec Mateusz", "JanPawel Drugi", 50);
+    bnk.transferCash("Ojciec Mateusz", "JanPawel Drugi", 100);
 
     bnk.accountBalance("Ojciec Mateusz");
     bnk.accountBalance("JanPawel Drugi");
