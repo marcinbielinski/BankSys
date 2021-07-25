@@ -88,17 +88,29 @@ public:
         return result->getCash();
     }
 
+//    Account* findAccount(const std::string& accountID)
+//    {
+//        auto findAcc = std::find_if(begin(the_bank), end(the_bank),
+//                                  [&accountID](auto& acc) { return acc.getID() == accountID;});
+//        if (findAcc != end(the_bank))
+//            return &*findAcc;
+//        else
+//        {
+//            std::cout << "There is no such account in our base." << std::endl;
+//            return nullptr;
+//        }
+//    }
+
     Account* findAccount(const std::string& accountID)
     {
-        auto findAcc = std::find_if(begin(the_bank), end(the_bank),
-                                  [&accountID](auto& acc) { return acc.getID() == accountID;});
-        if (findAcc != end(the_bank))
-            return &*findAcc;
-        else
+        for (int elem = 0; elem <= the_bank.size(); elem++)
         {
-            std::cout << "There is no such account in our base." << std::endl;
-            return nullptr;
+            if (the_bank[elem].getID() == accountID)
+            {
+                return &the_bank[elem];
+            }
         }
+        return nullptr;
     }
     void transferCash(const std::string& accountID1, const std::string& accountID2, int amount)
     {
@@ -118,6 +130,10 @@ public:
             {
                 std::cout << "This account: " << sender->getID() << " doesn't have enough funds." << std::endl;
             }
+        }
+        else
+        {
+            std::cout << "Sorry, either sender or recipient is not in our base." << std::endl;
         }
     }
 
@@ -143,7 +159,7 @@ public:
 class Interface
 {
 public:
-    Bank& bnk;
+    Bank& user_bank;
 
     void greetings() {}
 };
