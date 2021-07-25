@@ -9,22 +9,22 @@ struct Account {
             : first_name(std::move(fn)), last_name(std::move(ln)), cash(money) {}
 
 
-    std::string getFirstName()
+    const std::string& getFirstName()
     {
         return first_name;
     }
 
-    std::string getLastName()
+    const std::string& getLastName()
     {
         return last_name;
     }
 
-    std::string getID()
+    const std::string& getID()
     {
         return id;
     }
 
-    std::string getEmail()
+    const std::string& getEmail()
     {
         return email;
     }
@@ -108,7 +108,7 @@ public:
     }
 
     void printBank() {
-        for (auto elem : the_bank) {
+        for (auto& elem : the_bank) {
             std::cout << "Name: " << elem.getFirstName() << " Surname: " << elem.getLastName()
                       << " Money: " << elem.getCash() << " E-mail: " << elem.getEmail() << std::endl;
         }
