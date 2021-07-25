@@ -47,7 +47,6 @@ struct Account {
         }
         else
         {
-            std::cout << "This account: " << id << " doesn't have enough funds." << std::endl;
             return false;
         }
     }
@@ -89,27 +88,39 @@ public:
         return result->getCash();
     }
 
-    void transferCash(std::string accountID1, std::string accountID2, int amount)
+    auto findAccount(const std::string& accountID)
     {
-        auto sender = std::find_if(begin(the_bank), end(the_bank),
-                                   [&accountID1](auto& acc) { return acc.getID() == accountID1;});
-
-        (sender != end(the_bank))
-        ? std::cout << "Attempting the wire transfer... Please wait. \n"
-        : std::cout << "The account you're trying to wire from doesn't exist." << std::endl;
-
-        auto recipient = std::find_if(begin(the_bank), end(the_bank),
-                                      [&accountID2](auto& acc) { return acc.getID() == accountID2;});
-
-        (recipient != end(the_bank))
-        ? std::cout << "Successfully wired: " << amount << " from: " << sender->getID()
-                                                        << " to: "   << recipient->getID()  << '\n'
-        : std::cout << "This account doesn't exist." << std::endl;
-
-
-        if (sender->subtractCash(amount))
+        auto findAcc = std::find_if(begin(the_bank), end(the_bank),
+                                  [&accountID](auto& acc) { return acc.getID() == accountID;});
+        if (findAcc != end(the_bank))
+            return findAcc;
+        else
         {
-            recipient->addCash(amount);
+            std::cout << "There is no such account in our base." << std::endl;
+        }
+    }
+    void transferCash(const std::string& accountID1, const std::string& accountID2, int amount)
+    {
+        auto sender = findAccount(accountID1);
+
+        auto recipient = findAccount(accountID2);
+
+        if (sender != end(the_bank) && recipient != end(the_bank))
+        {
+            if (sender->subtractCash(amount))
+            {
+                recipient->addCash(amount);
+                std::cout << "Wire of: " << amount << "$ from: " << sender->getID() << " to: " << recipient->getID()
+                          << " was successful. Have a nice day!" << std::endl;
+            }
+            else
+            {
+                std::cout << "This account: " << sender->getID() << " doesn't have enough funds." << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "Sorry, either sender or recipient is not in our base." << std::endl;
         }
     }
 
@@ -128,6 +139,16 @@ public:
                       << " Money: " << elem.getCash() << " E-mail: " << elem.getEmail() << std::endl;
         }
     }
+
+
+};
+
+class Interface
+{
+public:
+    Bank& bnk;
+
+    void greetings() {}
 };
 
 int main() {
@@ -147,7 +168,7 @@ int main() {
 
     bnk.bankReserve();
 
-    bnk.transferCash("Ojciec Mateusz", "JanPawel Drugi", 100);
+    bnk.transferCash("Ojciec Mateusz", "JanPawel Drugi", 50);
 
     bnk.accountBalance("Ojciec Mateusz");
     bnk.accountBalance("JanPawel Drugi");
