@@ -1,7 +1,6 @@
 #include <iostream>
 #include <utility>
 #include <vector>
-#include <numeric>
 #include <algorithm>
 
 struct Account {
@@ -29,7 +28,7 @@ struct Account {
         return email;
     }
 
-    int& getCash()
+    int getCash()
     {
         return cash;
     }
@@ -72,7 +71,10 @@ public:
     void delAccount(std::string accountID) {
         the_bank.erase(std::remove_if(
                 begin(the_bank), end(the_bank),
-                [&accountID](auto& acc) { return acc.getID() == accountID; }), end(the_bank));
+                [&accountID](auto& acc) {
+                    return acc.getID() == accountID; }), end(the_bank));
+        std::cout << "Removing account of id: " << accountID << std::endl;
+
     }
 
     int accountBalance(std::string accountID) {
