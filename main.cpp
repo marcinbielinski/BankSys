@@ -34,10 +34,24 @@ struct Account {
         return cash;
     }
 
-//    int& addCash()
-//    {
-//
-//    }
+    void addCash(int money)
+    {
+        cash += money;
+    }
+
+    bool subtractCash(int money)
+    {
+        if (cash >= money)
+        {
+            cash -= money;
+            return true;
+        }
+        else
+        {
+            std::cout << "This account: " << id << " doesn't have enough funds." << std::endl;
+            return false;
+        }
+    }
 
 private:
     std::string first_name;
@@ -92,8 +106,11 @@ public:
                                                         << " to: "   << recipient->getID()  << '\n'
         : std::cout << "This account doesn't exist." << std::endl;
 
-        sender->getCash() -= amount;
-        recipient->getCash() += amount;
+
+        if (sender->subtractCash(amount))
+        {
+            recipient->addCash(amount);
+        }
     }
 
     int bankReserve() {
@@ -132,7 +149,7 @@ int main() {
 
     bnk.bankReserve();
 
-    bnk.transferCash("Ojciec Mateusz", "JanPawel Drugi", 50);
+    bnk.transferCash("Ojciec Mateusz", "JanPawel Drugi", 100);
 
     bnk.accountBalance("Ojciec Mateusz");
     bnk.accountBalance("JanPawel Drugi");
