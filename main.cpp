@@ -65,8 +65,6 @@ class Bank {
 public:
     std::vector<Account> the_bank;
 
-    std::vector<int> reserve;
-
     void addAccount(std::string fn, std::string sur, int money) {
         the_bank.emplace_back(Account(std::move(fn), std::move(sur), money));
     }
@@ -114,12 +112,10 @@ public:
     }
 
     int bankReserve() {
-        int result;
+        int result {0};
         for (auto &elem : the_bank) {
-            reserve.emplace_back(elem.getCash());
+            result += elem.getCash();
         }
-        result = std::accumulate(begin(reserve), end(reserve), 0);
-
         std::cout << "The Bank reserve is : " << result << std::endl;
         return result;
     }
